@@ -24,12 +24,46 @@ public class DogApiBreedFetcher implements BreedFetcher {
      * @throws BreedNotFoundException if the breed does not exist (or if the API call fails for any reason)
      */
     @Override
-    public List<String> getSubBreeds(String breed) {
-        // TODO Task 1: Complete this method based on its provided documentation
+   /* public List<String> getSubBreeds(String breed) {
         //      and the documentation for the dog.ceo API. You may find it helpful
         //      to refer to the examples of using OkHttpClient from the last lab,
         //      as well as the code for parsing JSON responses.
         // return statement included so that the starter code can compile and run.
         return new ArrayList<>();
+    }*/
+
+    public List<String> getSubBreeds(String breed) throws BreedFetcher.BreedNotFoundException {
+        String url = "https://dog.ceo/api/breed/" + breed.toLowerCase(Locale.ROOT) + "/list";
+        Request request = new Request.Builder().url(url).build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new BreedFetcher.BreedNotFoundException(breed);
+            }
+
+            if (response.body() == null) {
+                throw new BreedFetcher.BreedNotFoundException(breed);
+            }
+
+            String body = response.body().string();
+            JSONObject obj = new JSONObject(body);
+
+
+            String status = obj.getString("status");
+            if (!"success".equals(status)) {
+                throw new BreedFetcher.BreedNotFoundException(breed);
+            }
+
+
+            JSONArray message = obj.getJSONArray("message");
+            List<String> result = new ArrayList<>();
+            for (int i = 0; i < message.length(); i++) {
+                result.add(message.getString(i));
+            }
+            return result;
+
+        } catch (IOException e) {
+            throw new BreedFetcher.BreedNotFoundException(breed);
+        }
     }
-}
+    }
