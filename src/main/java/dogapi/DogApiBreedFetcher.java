@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * BreedFetcher implementation that relies on the dog.ceo API.
