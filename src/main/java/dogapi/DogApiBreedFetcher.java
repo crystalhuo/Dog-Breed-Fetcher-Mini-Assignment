@@ -16,10 +16,7 @@ import java.util.concurrent.TimeUnit;
  * exceptions to align with the requirements of the BreedFetcher interface.
  */
 public class DogApiBreedFetcher implements BreedFetcher {
-    private final OkHttpClient client = new OkHttpClient.Builder()
-                        .connectTimeout(30, TimeUnit.SECONDS)  // 添加这行
-                        .readTimeout(30, TimeUnit.SECONDS)     // 添加这行
-                        .build();
+    private final OkHttpClient client = new OkHttpClient();
 
     /**
      * Fetch the list of sub breeds for the given breed from the dog.ceo API.
